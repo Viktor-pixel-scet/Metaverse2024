@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Метавсесвіт 2024 - Магазин майбутнього</title>
+    <link rel="icon" href="https://artbooks.ua/image/cache/catalog/Covers/2024/Book_METAVERSE_red_web-700x740.png">
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<div class="dynamic-bg">
+    <div class="bg-lines"></div>
+</div>
+
+<nav class="nav">
+    <div class="nav-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="#author-info">Інформація про розробника</a></li>
+        <li><a href="#home">Головна</a></li>
+        <li><a href="#about">Про нас</a></li>
+        <li><a href="#shop">Магазин</a></li>
+        <li><a href="#stats">Статистика</a></li>
+        <li><a href="#contact">Контакти</a></li>
+        <li><a href="#conclusion">Висновки</a></li>
+    </ul>
+</nav>
+
+<button id="cartBtn" class="fixed-cart-btn">
+    Кошик (<span class="cart-count">0</span>)
+</button>
+
+<button id="viewOrdersBtn" class="Order-cart-btn">Переглянути замовлення</button>
+
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <span id="closeCart" class="close">&times;</span>
+        <h2>Ваш кошик</h2>
+        <div class="cart-items"></div>
+        <div class="cart-total">
+            <strong>Загальна сума: $<span id="cartTotal">0</span></strong>
+        </div>
+        <button class="checkout-btn">Оформити замовлення</button>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <h3 id="confirmMessage"></h3>
+        <button id="confirmYes">Так</button>
+        <button id="confirmNo">Ні</button>
+    </div>
+</div>
+
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <span id="closeCheckout" class="close">&times;</span>
+        <h2>Оформлення замовлення</h2>
+        <form id="orderForm">
+            <label for="name">Ім'я:</label>
+            <input type="text" id="name" required pattern="[A-Za-zА-Яа-яЁёЇїІіЄєҐґ' ]{2,}" title="Ім'я повинно містити лише літери і бути не менше двох символів">
+
+            <label for="phone">Номер телефону:</label>
+            <input type="text" id="phone" value="+380" required pattern="\+380\d{9}" title="Введіть коректний номер у форматі +380XXXXXXXXX">
+
+            <label for="address">Адреса доставки:</label>
+            <input type="text" id="address" required>
+
+            <button type="submit">Підтвердити замовлення</button>
+        </form>
+        <div id="orderConfirmation" style="display: none;"></div>
+    </div>
+</div>
+
+<div id="ordersModal" class="modal">
+    <div class="modal-content">
+        <span id="closeOrders" class="close">&times;</span>
+        <h2>Список замовлень</h2>
+        <ul id="ordersList" class="orders-list"></ul>
+    </div>
+</div>
+
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Метавсесвіт 2024</h1>
+        <p class="hero-subtitle">Відкрийте нові виміри реальності та цифрових можливостей.</p>
+        <p class="hero-description">Зануртесь у світ інновацій, де ви можете знайти останні гаджети, VR-ресурси та цифрові активи, які розширять вашу уяву.</p>
+        <a href="#shop" class="btn-explore">Досліджуйте наш магазин</a>
+    </div>
+</section>
+
+<section id="about" class="card-container">
+    <div class="meta-card">
+        <div class="img-container">
+            <img src="https://vikna.if.ua/assets/gallery/2020/03/20/108358/135132_o__large.jpeg">
+        </div>
+        <h2>Віртуальна реальність та гаджети</h2>
+        <div class="object-3d">
+            <div class="cube-face"></div>
+        </div>
+
+        <p>Занурьтеся у світ майбутнього з нашими інноваційними пристроями.</p>
+        <ul>
+            <li>VR окуляри та костюми повного занурення</li>
+            <li>Голографічні проєктори та смартфони</li>
+            <li>Розумні годинники та фітнес-трекери</li>
+            <li>Дрони для зйомок та підводні дослідження</li>
+        </ul>
+        <p>Відкрийте нові горизонти з нашими передовими технологіями!</p>
+    </div>
+
+    <div class="meta-card">
+        <div class="img-container">
+            <img src="https://kochegarka.com.ua/wp-content/uploads/2023/09/umn_dom1.jpg">
+        </div>
+        <h2>Розумний дім та безпека</h2>
+        <div class="object-3d">
+            <div class="cube-face"></div>
+        </div>
+
+        <p>Перетворіть ваш дім на інтелектуальний та безпечний простір.</p>
+        <ul>
+            <li>Системи розумного дому SmartHome</li>
+            <li>Розумні холодильники та термостати</li>
+            <li>Квантові шифратори даних</li>
+            <li>Смарт-камери та електронні ключі безпеки</li>
+        </ul>
+        <p>Зробіть ваше життя комфортнішим та безпечнішим з нашими рішеннями!</p>
+    </div>
+
+    <div class="meta-card">
+        <div class="img-container">
+            <img src="https://med-expert.com.ua/journals/wp-content/uploads/2018/06/news_me.jpg">
+        </div>
+        <h2>Здоров'я та інновація</h2>
+        <div class="object-3d">
+            <div class="cube-face"></div>
+        </div>
+
+        <p>Покращуйте своє здоров'я та розкривайте потенціал з передовими технологіями.</p>
+        <ul>
+            <li>Нейропроцесори для підвищення IQ</li>
+            <li>Біонічні екзоскелети та нанороботи для імунітету</li>
+            <li>Віртуальні фітнес-тренери</li>
+            <li>AI асистенти та квантові комп'ютери</li>
+        </ul>
+        <p>Інвестуйте у своє здоров'я та майбутнє з нашими інноваційними продуктами!</p>
+    </div>
+</section>
+
+<section id="shop" class="shop-section">
+    <h2>Магазин Метавсесвіту</h2>
+    <div class="filter-section">
+        <select id="categoryFilter">
+            <option value="all">Всі категорії</option>
+            <option value="Vr">VR</option>
+            <option value="Гаджети">Гаджети</option>
+            <option value="Комп'ютери">Комп'ютери</option>
+            <option value="Nft">NFT</option>
+            <option value="Здоров'я">Здоров'я</option>
+            <option value="Техніка">Техніка</option>
+            <option value="Роботи">Роботи</option>
+            <option value="Енергія">Енергія</option>
+            <option value="Транспорт">Транспорт</option>
+            <option value="Безпека">Безпека</option>
+            <option value="Мистецтво">Мистецтво</option>
+            <option value="Сільське господарство">Сільське господарство</option>
+            <option value="Наука">Наука</option>
+            <option value="Оптика">Оптика</option>
+            <option value="Кухня">Кухня</option>
+            <option value="Спорт">Спорт</option>
+            <option value="Музика">Музика</option>
+            <option value="Розваги">Розваги</option>
+            <option value="Мода">Мода</option>
+            <option value="Дизайн">Дизайн</option>
+        </select>
+        <input type="number" id="priceFilter" placeholder="Макс. ціна">
+        <button id="applyFilters">Застосувати</button>
+    </div>
+    <div class="shop-grid" id="shopGrid">
+
+    </div>
+</section>
+
+<section id="stats" class="stats-section">
+    <h2>Наша статистика</h2>
+    <p class="stats-description">
+        Відзначте наші досягнення в метавсесвіті:
+    </p>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-icon">
+                <div class="img-container">
+                    <img src="https://hackyourmom.com/wp-content/uploads/2023/05/yzobrazhenye_2023-05-10_223852357.png">
+                </div>
+            </div>
+            <div class="stat-number">15135151</div>
+            <p>Активних користувачів</p>
+            <small>
+                Завдяки нашій платформі, тисячі користувачів насолоджуються новими можливостями.
+            </small>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">
+                <div class="img-container">
+                    <img src="https://www.site2b.ua/wp-content/uploads/2024/09/VR_virtual_workspaces-min.png">
+                </div>
+            </div>
+            <div class="stat-number">51531514</div>
+            <p>Віртуальних просторів</p>
+            <small>
+                Створено безліч просторів для досліджень, навчання та спілкування.
+            </small>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">
+                <div class="img-container">
+                    <img src="https://forklog.com/wp-content/uploads/transactions.webp">
+                </div>
+            </div>
+            <div class="stat-number">115672452</div>
+            <p>Цифрових транзакцій</p>
+            <small>
+                Мільярди транзакцій, які доводять довіру до нашої платформи.
+            </small>
+        </div>
+    </div>
+</section>
+
+<br>
+
+<footer id="contact" class="footer">
+    <div class="footer-content">
+        <div class="footer-section about">
+            <h3>Метавсесвіт 2024</h3>
+            <p>Ваш портал у світ майбутнього. Відкрийте нові виміри реальності разом з нами.</p>
+            <div class="contact">
+                <span>malivskii05@gmail.com</span>
+                <br>
+                <span>+380 98 60 57 400</span>
+            </div>
+        </div>
+        <div class="footer-section links">
+            <h3>Швидкі посилання</h3>
+            <ul>
+                <li><a href="#author-info">Інформація про розробника</a></li>
+                <li><a href="#home">Головна</a></li>
+                <li><a href="#about">Про нас</a></li>
+                <li><a href="#shop">Магазин</a></li>
+                <li><a href="#stats">Статистика</a></li>
+                <li><a href="#conclusion">Висновки</a></li>
+            </ul>
+        </div>
+        <div class="footer-section social">
+            <h3>Приєднуйтесь до нас</h3>
+            <div class="social-icons">
+                <a href="https://t.me/Viktor_02_03" class="social-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Telegram_Messenger.png" class="social-icon-img">
+                </a>
+                <a href="https://www.instagram.com/victor_87469?igsh=MThiZ3B2bzdvOHIwdw==" class="social-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/800px-Instagram_logo_2022.svg.png" class="social-icon-img">
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=100041693771416" class="social-icon">
+                    <img src="https://thumbs.dreamstime.com/z/%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF-%D0%B7%D0%BD%D0%B0%D1%87%D0%BA%D0%B0-facebook-%D0%BA%D1%80%D0%B0%D1%81%D0%B8%D0%B2%D1%8B%D0%B9-%D0%B8%D0%BA%D0%BE%D0%BD%D0%BA%D0%B0-225149232.jpg" class="social-icon-img">
+                </a>
+                <a href="viber://chat?number=%2B380986057400" class="social-icon">
+                    <img src="https://images-eds-ssl.xboxlive.com/image?url=4rt9.lXDC4H_93laV1_eHM0OYfiFeMI2p9MWie0CvL99U4GA1gf6_kayTt_kBblFwHwo8BW8JXlqfnYxKPmmBcwJ1G9hYnrh9umdSMNevWJke_UAJoFhwm7lDkfIk.ZtU2_sNp66FHtoykUumCrohn.VJYoK31ZqPZCbmLfEMlo-&format=source" class="social-icon-img">
+                </a>
+            </div>
+        </div>
+        <div class="footer-section newsletter">
+            <h3>Підпишіться на новини</h3>
+            <form>
+                <input type="email" placeholder="Введіть ваш email" required>
+                <button type="submit" class="btn-submit">Підписатися</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Метавсесвіт. Всі права захищені.</p>
+        <p>
+            <a href="#">Політика конфіденційності</a>
+            | <a href="#">Умови використання</a>
+        </p>
+    </div>
+    <div class="footer-decoration">
+        <div class="cyber-circuit"></div>
+    </div>
+</footer>
+
+<section id="conclusion" class="conclusion-section">
+    <div class="conclusion-container">
+        <h2 class="conclusion-title">Висновки проекта</h2>
+
+        <div class="conclusion-block">
+            <h3 class="conclusion-subtitle">Досягнуті результати:</h3>
+            <ul class="conclusion-list results">
+                <li>Створено сучасний вебсайт з інтуїтивним інтерфейсом та адаптивним дизайном</li>
+                <li>Реалізовано функціонал електронної комерції з системою фільтрації товарів</li>
+                <li>Впроваджено інтерактивні елементи для покращення користувацького досвіду</li>
+                <li>Додано систему управління замовленнями та кошиком</li>
+            </ul>
+        </div>
+
+        <div class="conclusion-block">
+            <h3 class="conclusion-subtitle">Перспективи розвитку проекту:</h3>
+            <ul class="conclusion-list prospects">
+                <li>Інтеграція з платіжними системами для автоматизації оплати</li>
+                <li>Впровадження системи відгуків та рейтингів товарів</li>
+                <li>Розробка мобільного додатку для зручності користування</li>
+                <li>Додавання функціонала персоналізованих рекомендацій</li>
+                <li>Розширення каталогу товарів та категорій</li>
+                <li>Впровадження чат-бота для підтримки користувачів</li>
+            </ul>
+        </div>
+
+        <div class="conclusion-summary">
+            <p>
+                Проєкт "Метавсесвіт 2024" демонструє потенціал сучасних вебтехнологій у створенні інноваційних платформ електронної комерції.
+                Реалізовані функції та дизайн відповідають сучасним трендам та потребам користувачів.
+                Подальший розвиток проєкт спрямований на розширення функціонала та покращення користувацького досвіду.
+            </p>
+        </div>
+    </div>
+</section>
+<br>
+    <br>
+<br>
+<script src="Script.js"></script>
+</body>
+</html>
