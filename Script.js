@@ -11,10 +11,8 @@ const confirmMessage = document.getElementById('confirmMessage');
 const confirmYes = document.getElementById('confirmYes');
 const confirmNo = document.getElementById('confirmNo');
 
-const currentItem = {
-    name: '',
-    price: 0
-};
+
+
 
 navBtn.addEventListener('click', () => {
     navMenu.classList.toggle('active');
@@ -29,7 +27,6 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 });
 
 document.addEventListener('click', (e) => {
-
     if (!navMenu.contains(e.target) && !navBtn.contains(e.target)) {
         navMenu.classList.remove('active');
     }
@@ -40,10 +37,7 @@ const cartModal = document.getElementById('cartModal');
 const cartItemsContainer = document.querySelector('.cart-items');
 
 function updateCart() {
-    const cartItemsContainer = document.querySelector('.cart-items');
-
     cartItemsContainer.innerHTML = '';
-
     let total = 0;
 
     cartItemsContainer.innerHTML = '';
@@ -65,22 +59,40 @@ function removeFromCart(index) {
     updateCart();
 }
 
-function renderCartItems() {
-    cartItemsContainer.innerHTML = '';
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '' +
-            '<p>Ваш кошик порожній.</p>';
-        return;
-    }
-    cart.forEach(item => {
-        const itemDiv = document.createElement('div');
-        itemDiv.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-        cartItemsContainer.appendChild(itemDiv);
-    });
+function handleOrderSubmission(e) {
+    e.preventDefault();
+    const formData = getFormData(e.target);
+    processOrder(formData);
+    resetForm(e.target);
+}
+
+function getFormData(form) {
+    return {
+        name: form.elements['name'].value,
+        phone: form.elements['phone'].value,
+        address: form.elements['address'].value,
+    };
+}
+
+function processOrder(formData) {
+    const order = {
+        ...formData,
+        items: cart.map(item => item.name).join(', ')
+    };
+
+    orders.push(order);
+    alert(`Дякуємо, ${formData.name}! Ваше замовлення підтверджене.`);
+    checkoutModal.style.display = 'none';
+    cart = [];
+    updateCart();
+    displayOrders();
+}
+
+function resetForm(form) {
+    form.reset();
 }
 
 document.querySelector('.checkout-btn').addEventListener('click', () => {
-
     if (cart.length === 0) {
         alert('Ваш кошик порожній. Будь ласка, додайте товари перед оформленням замовлення.');
         return;
@@ -105,54 +117,6 @@ document.querySelectorAll('.close-modal').forEach(button => {
 });
 
 window.addEventListener('click', (event) => {
-    if (event.target === checkoutModal) {
-        checkoutModal.style.display = 'none';
-    }
-});
-
-window.addEventListener('click', (event) => {
-    const checkoutModal = document.getElementById('checkoutModal');
-    const ordersModal = document.getElementById('ordersModal');
-    if (event.target === checkoutModal) {
-        checkoutModal.style.display = 'none';
-    }
-    if (event.target === ordersModal) {
-        ordersModal.style.display = 'none';
-    }
-});
-
-document.getElementById('closeOrders').addEventListener('click', () => {
-    document.getElementById('ordersModal').style.display = 'none';
-});
-
-document.getElementById('orderForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const name = e.target.elements['name'].value;
-    const phone = e.target.elements['phone'].value;
-    const address = e.target.elements['address'].value;
-
-    const order = {
-        name: name,
-        phone: phone,
-        address: address,
-        items: cart.map(item => item.name).join(', ')
-    };
-
-    orders.push(order);
-
-    alert(`Дякуємо, ${name}! Ваше замовлення підтверджене. Скоро наш співробітник зателефонує для підтвердження замовлення.`);
-
-    e.target.elements['name'].value = '';
-    e.target.elements['phone'].value = '+380';
-    e.target.elements['address'].value = '';
-
-    checkoutModal.style.display = 'none';
-    cart = [];
-    updateCart();
-    displayOrders();
-};
-
-window.addEventListener('click', (event) => {
     const modals = ['cartModal', 'checkoutModal', 'ordersModal'];
     modals.forEach(modalId => {
         const modal = document.getElementById(modalId);
@@ -162,10 +126,11 @@ window.addEventListener('click', (event) => {
     });
 });
 
-window.addEventListener('click', (event) => {
-    if (event.target === cartModal) {
-        cartModal.style.display = 'none';
-    }
+document.getElementById('orderForm').onsubmit = handleOrderSubmission;
+
+document.getElementById('viewOrdersBtn').addEventListener('click', () => {
+    displayOrders();
+    document.getElementById('ordersModal').style.display = 'block';
 });
 
 function displayOrders() {
@@ -186,10 +151,19 @@ function displayOrders() {
     });
 }
 
-document.getElementById('viewOrdersBtn').addEventListener('click', () => {
-    displayOrders();
-    document.getElementById('ordersModal').style.display = 'block';
-});
+function renderCartItems() {
+    cartItemsContainer.innerHTML = '';
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Ваш кошик порожній.</p>';
+        return;
+    }
+
+    cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+        cartItemsContainer.appendChild(itemDiv);
+    });
+}
 
 const numbers = document.querySelectorAll('.stat-number');
 numbers.forEach(number => {
@@ -621,7 +595,8 @@ const shopItems = [
         price: 4999,
         image: "https://a.allegroimg.com/original/116ebf/f0a7a6314c5c944434895f49fc28/BIOREZONANS-MAGNETYCZNY-KWANTOWY-Analizator-Quantum-PL-Marka-bez-marki",
         category: "Наука"
-    }
+    },
+    // Інші товари...
 ];
 
 function displayShopItems(items) {
@@ -666,7 +641,7 @@ function createShopItem(item) {
     return shopItem;
 }
 
-shopGrid.addEventListener('click', (e) => {
+document.getElementById('shopGrid').addEventListener('click', (e) => {
     if (e.target.classList.contains('buy-btn')) {
         currentItemName = e.target.parentElement.querySelector('h3').textContent;
         currentItemPrice = parseFloat(e.target.parentElement.querySelector('.price').textContent.replace('$', ''));
@@ -688,64 +663,8 @@ confirmYes.addEventListener('click', () => {
     confirmModal.style.display = 'none';
 
     updateCart();
-
 });
 
 confirmNo.addEventListener('click', () => {
-
     confirmModal.style.display = 'none';
-});
-
-document.getElementById('cartBtn').addEventListener('click', () => {
-    cartModal.style.display = 'block';
-    updateCart();
-});
-
-document.getElementById('closeCart').addEventListener('click', () => {
-    cartModal.style.display = 'none';
-});
-
-let favorites = [];
-
-function updateFavorites() {
-    const favoritesContainer = document.querySelector('.favorites');
-    favoritesContainer.innerHTML = '';
-    if (favorites.length === 0) {
-        favoritesContainer.innerHTML = '<p>У вас ще немає улюблених товарів</p>';
-    } else {
-        favorites.forEach(item => {
-            const favoriteItem = document.createElement('div');
-            favoriteItem.classList.add('favorite-item');
-            favoriteItem.innerHTML = `
-                <p>${item.name} - $${item.price}</p>
-                <button class="remove-favorite">Видалити з улюблених</button>
-            `;
-            favoriteItem.querySelector('.remove-favorite').addEventListener('click', () => {
-                favorites = favorites.filter(fav => fav !== item);
-                updateFavorites();
-            });
-            favoritesContainer.appendChild(favoriteItem);
-        });
-    }
-}
-
-const cards = document.querySelectorAll('.meta-card');
-cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const angleX = (y - centerY) / 30;
-        const angleY = (centerX - x) / 30;
-
-        card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.02)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'none';
-    });
 });
