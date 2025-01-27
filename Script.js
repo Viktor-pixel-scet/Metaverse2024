@@ -13,7 +13,6 @@ const confirmNo = document.getElementById('confirmNo');
 
 
 
-
 navBtn.addEventListener('click', () => {
     navMenu.classList.toggle('active');
     navBtn.classList.toggle('active');
@@ -74,11 +73,6 @@ function getFormData(form) {
     };
 }
 
-function processOrder(formData) {
-    const order = {
-        ...formData,
-        items: cart.map(item => item.name).join(', ')
-    };
 
     orders.push(order);
     alert(`Дякуємо, ${formData.name}! Ваше замовлення підтверджене.`);
@@ -100,37 +94,6 @@ document.querySelector('.checkout-btn').addEventListener('click', () => {
 
     cartModal.style.display = 'none';
     checkoutModal.style.display = 'block';
-});
-
-document.querySelectorAll('.open-modal').forEach(button => {
-    button.addEventListener('click', (event) => {
-        const modalId = event.target.dataset.modalId;
-        const modal = document.getElementById(modalId);
-        modal.style.display = 'block';
-    });
-});
-
-document.querySelectorAll('.close-modal').forEach(button => {
-    button.addEventListener('click', () => {
-        button.closest('.modal').style.display = 'none';
-    });
-});
-
-window.addEventListener('click', (event) => {
-    const modals = ['cartModal', 'checkoutModal', 'ordersModal'];
-    modals.forEach(modalId => {
-        const modal = document.getElementById(modalId);
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-});
-
-document.getElementById('orderForm').onsubmit = handleOrderSubmission;
-
-document.getElementById('viewOrdersBtn').addEventListener('click', () => {
-    displayOrders();
-    document.getElementById('ordersModal').style.display = 'block';
 });
 
 function displayOrders() {
@@ -190,6 +153,7 @@ const shopItems = [
         image: "https://content2.rozetka.com.ua/goods/images/big/309800047.png",
         category: "Vr"
     },
+
     {
         name: "Нейроінтерфейс Nexus",
         description: "Керуйте віртуальним світом силою думки",
@@ -595,7 +559,7 @@ const shopItems = [
         price: 4999,
         image: "https://a.allegroimg.com/original/116ebf/f0a7a6314c5c944434895f49fc28/BIOREZONANS-MAGNETYCZNY-KWANTOWY-Analizator-Quantum-PL-Marka-bez-marki",
         category: "Наука"
-    },
+
     // Інші товари...
 ];
 
@@ -668,3 +632,4 @@ confirmYes.addEventListener('click', () => {
 confirmNo.addEventListener('click', () => {
     confirmModal.style.display = 'none';
 });
+
