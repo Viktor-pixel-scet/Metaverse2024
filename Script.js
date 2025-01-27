@@ -14,7 +14,6 @@ const confirmNo = document.getElementById('confirmNo');
 let currentItemName = '';
 let currentItemPrice = 0;
 
-
 navBtn.addEventListener('click', () => {
     navMenu.classList.toggle('active');
     navBtn.classList.toggle('active');
@@ -28,7 +27,6 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 });
 
 document.addEventListener('click', (e) => {
-
     if (!navMenu.contains(e.target) && !navBtn.contains(e.target)) {
         navMenu.classList.remove('active');
     }
@@ -39,22 +37,21 @@ const cartModal = document.getElementById('cartModal');
 const cartItemsContainer = document.querySelector('.cart-items');
 
 function updateCart() {
-    const cartItemsContainer = document.querySelector('.cart-items');
-
     cartItemsContainer.innerHTML = '';
 
+    const fragment = document.createDocumentFragment(); // Використання DocumentFragment
     let total = 0;
 
     cart.forEach((item, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'cart-item';
         itemDiv.innerHTML = `${item.name} - $${item.price} 
-        <button class="remove-btn" onclick="removeFromCart(${index})">Скасувати</button>`;
-        cartItemsContainer.appendChild(itemDiv);
-
+        <button class="remove-btn" data-index="${index}">Скасувати</button>`;
+        fragment.appendChild(itemDiv);
         total += item.price;
     });
 
+    cartItemsContainer.appendChild(fragment); // Єдина операція вставки
     document.getElementById('cartTotal').innerText = total.toFixed(2);
     document.querySelector('.cart-count').innerText = cart.length;
 }
@@ -64,18 +61,29 @@ function removeFromCart(index) {
     updateCart();
 }
 
+cartItemsContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-btn')) {
+        const index = parseInt(e.target.dataset.index, 10);
+        removeFromCart(index);
+    }
+});
+
 function renderCartItems() {
     cartItemsContainer.innerHTML = '';
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '' +
-            '<p>Ваш кошик порожній.</p>';
+        cartItemsContainer.innerHTML = '<p>Ваш кошик порожній.</p>';
         return;
     }
+
+    const fragment = document.createDocumentFragment();
+
     cart.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-        cartItemsContainer.appendChild(itemDiv);
+        fragment.appendChild(itemDiv);
     });
+
+    cartItemsContainer.appendChild(fragment);
 }
 
 cartBtn.addEventListener('click', () => {
@@ -88,7 +96,6 @@ closeCart.addEventListener('click', () => {
 });
 
 document.querySelector('.checkout-btn').addEventListener('click', () => {
-
     if (cart.length === 0) {
         alert('Ваш кошик порожній. Будь ласка, додайте товари перед оформленням замовлення.');
         return;
@@ -160,10 +167,9 @@ window.addEventListener('click', (event) => {
     });
 });
 
-window.addEventListener('click', (event) => {
-    if (event.target === cartModal) {
-        cartModal.style.display = 'none';
-    }
+document.getElementById('viewOrdersBtn').addEventListener('click', () => {
+    displayOrders();
+    document.getElementById('ordersModal').style.display = 'block';
 });
 
 function displayOrders() {
@@ -183,11 +189,6 @@ function displayOrders() {
         ordersList.appendChild(listItem);
     });
 }
-
-document.getElementById('viewOrdersBtn').addEventListener('click', () => {
-    displayOrders();
-    document.getElementById('ordersModal').style.display = 'block';
-});
 
 const numbers = document.querySelectorAll('.stat-number');
 numbers.forEach(number => {
@@ -619,7 +620,8 @@ const shopItems = [
         price: 4999,
         image: "https://a.allegroimg.com/original/116ebf/f0a7a6314c5c944434895f49fc28/BIOREZONANS-MAGNETYCZNY-KWANTOWY-Analizator-Quantum-PL-Marka-bez-marki",
         category: "Наука"
-    }
+    },
+    // Інші товари...
 ];
 
 function displayShopItems(items) {
@@ -664,7 +666,7 @@ function createShopItem(item) {
     return shopItem;
 }
 
-shopGrid.addEventListener('click', (e) => {
+document.getElementById('shopGrid').addEventListener('click', (e) => {
     if (e.target.classList.contains('buy-btn')) {
         currentItemName = e.target.parentElement.querySelector('h3').textContent;
         currentItemPrice = parseFloat(e.target.parentElement.querySelector('.price').textContent.replace('$', ''));
@@ -686,64 +688,8 @@ confirmYes.addEventListener('click', () => {
     confirmModal.style.display = 'none';
 
     updateCart();
-
 });
 
 confirmNo.addEventListener('click', () => {
-
     confirmModal.style.display = 'none';
-});
-
-document.getElementById('cartBtn').addEventListener('click', () => {
-    cartModal.style.display = 'block';
-    updateCart();
-});
-
-document.getElementById('closeCart').addEventListener('click', () => {
-    cartModal.style.display = 'none';
-});
-
-let favorites = [];
-
-function updateFavorites() {
-    const favoritesContainer = document.querySelector('.favorites');
-    favoritesContainer.innerHTML = '';
-    if (favorites.length === 0) {
-        favoritesContainer.innerHTML = '<p>У вас ще немає улюблених товарів</p>';
-    } else {
-        favorites.forEach(item => {
-            const favoriteItem = document.createElement('div');
-            favoriteItem.classList.add('favorite-item');
-            favoriteItem.innerHTML = `
-                <p>${item.name} - $${item.price}</p>
-                <button class="remove-favorite">Видалити з улюблених</button>
-            `;
-            favoriteItem.querySelector('.remove-favorite').addEventListener('click', () => {
-                favorites = favorites.filter(fav => fav !== item);
-                updateFavorites();
-            });
-            favoritesContainer.appendChild(favoriteItem);
-        });
-    }
-}
-
-const cards = document.querySelectorAll('.meta-card');
-cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const angleX = (y - centerY) / 30;
-        const angleY = (centerX - x) / 30;
-
-        card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.02)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'none';
-    });
 });
