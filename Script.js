@@ -11,9 +11,10 @@ const confirmMessage = document.getElementById('confirmMessage');
 const confirmYes = document.getElementById('confirmYes');
 const confirmNo = document.getElementById('confirmNo');
 
-let currentItemName = '';
-let currentItemPrice = 0;
-
+const currentItem = {
+    name: '',
+    price: 0
+};
 
 navBtn.addEventListener('click', () => {
     navMenu.classList.toggle('active');
