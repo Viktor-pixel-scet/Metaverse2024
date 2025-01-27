@@ -11,8 +11,8 @@ const confirmMessage = document.getElementById('confirmMessage');
 const confirmYes = document.getElementById('confirmYes');
 const confirmNo = document.getElementById('confirmNo');
 
-let currentItemName = '';
-let currentItemPrice = 0;
+
+
 
 navBtn.addEventListener('click', () => {
     navMenu.classList.toggle('active');
@@ -40,15 +40,15 @@ function updateCart() {
     cartItemsContainer.innerHTML = '';
     let total = 0;
 
+    cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'cart-item';
-        itemDiv.innerHTML = `${item.name} - $${item.price} 
-        <button class="remove-btn" onclick="removeFromCart(${index})">Скасувати</button>`;
+        itemDiv.innerHTML = `${item.name} - $${item.price} x${item.quantity} 
+    <button class="remove-btn" onclick="removeFromCart(${index})">Скасувати</button>`;
         cartItemsContainer.appendChild(itemDiv);
-
-        total += item.price;
     });
+
 
     document.getElementById('cartTotal').innerText = total.toFixed(2);
     document.querySelector('.cart-count').innerText = cart.length;
@@ -92,15 +92,6 @@ function resetForm(form) {
     form.reset();
 }
 
-cartBtn.addEventListener('click', () => {
-    cartModal.style.display = 'block';
-    renderCartItems();
-});
-
-closeCart.addEventListener('click', () => {
-    cartModal.style.display = 'none';
-});
-
 document.querySelector('.checkout-btn').addEventListener('click', () => {
     if (cart.length === 0) {
         alert('Ваш кошик порожній. Будь ласка, додайте товари перед оформленням замовлення.');
@@ -111,8 +102,18 @@ document.querySelector('.checkout-btn').addEventListener('click', () => {
     checkoutModal.style.display = 'block';
 });
 
-closeCheckout.addEventListener('click', () => {
-    checkoutModal.style.display = 'none';
+document.querySelectorAll('.open-modal').forEach(button => {
+    button.addEventListener('click', (event) => {
+        const modalId = event.target.dataset.modalId;
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'block';
+    });
+});
+
+document.querySelectorAll('.close-modal').forEach(button => {
+    button.addEventListener('click', () => {
+        button.closest('.modal').style.display = 'none';
+    });
 });
 
 window.addEventListener('click', (event) => {
