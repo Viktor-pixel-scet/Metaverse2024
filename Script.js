@@ -45,15 +45,15 @@ function updateCart() {
 
     let total = 0;
 
+    cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'cart-item';
-        itemDiv.innerHTML = `${item.name} - $${item.price} 
-        <button class="remove-btn" onclick="removeFromCart(${index})">Скасувати</button>`;
+        itemDiv.innerHTML = `${item.name} - $${item.price} x${item.quantity} 
+    <button class="remove-btn" onclick="removeFromCart(${index})">Скасувати</button>`;
         cartItemsContainer.appendChild(itemDiv);
-
-        total += item.price;
     });
+
 
     document.getElementById('cartTotal').innerText = total.toFixed(2);
     document.querySelector('.cart-count').innerText = cart.length;
