@@ -656,13 +656,34 @@ document.getElementById('applyFilters').addEventListener('click', () => {
 function createShopItem(item) {
     const shopItem = document.createElement('div');
     shopItem.classList.add('shop-item');
-    shopItem.innerHTML = `
-        <img src="${item.image}" alt="${item.name}">
-        <h3>${item.name} <span class="item-category">(${item.category})</span></h3>
-        <p>${item.description}</p>
-        <p class="price">$${item.price}</p>
-        <button class="buy-btn">Купити</button>
-    `;
+
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.alt = item.name;
+    shopItem.appendChild(img);
+
+    const title = document.createElement('h3');
+    title.textContent = item.name;
+    const category = document.createElement('span');
+    category.classList.add('item-category');
+    category.textContent = ` (${item.category})`;
+    title.appendChild(category);
+    shopItem.appendChild(title);
+
+    const description = document.createElement('p');
+    description.textContent = item.description;
+    shopItem.appendChild(description);
+
+    const price = document.createElement('p');
+    price.classList.add('price');
+    price.textContent = `$${item.price}`;
+    shopItem.appendChild(price);
+
+    const button = document.createElement('button');
+    button.classList.add('buy-btn');
+    button.textContent = 'Купити';
+    shopItem.appendChild(button);
+
     return shopItem;
 }
 
