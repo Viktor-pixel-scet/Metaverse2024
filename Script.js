@@ -65,14 +65,63 @@ function handleOrderSubmission(e) {
     resetForm(e.target);
 }
 
-function getFormData(form) {
-    return {
-        name: form.elements['name'].value,
-        phone: form.elements['phone'].value,
-        address: form.elements['address'].value,
-    };
+
+class FormValidationError extends Error {
+    constructor(message, field) {
+        super(message);
+        this.name = 'FormValidationError';
+        this.field = field;
+    }
 }
 
+
+function getFormData(form) {
+    try {
+        if (!form || !(form instanceof HTMLFormElement)) {
+            throw new Error('Форму не знайдено або передано невірний тип');
+        }
+
+        const requiredFields = ['name', 'phone', 'address'];
+        requiredFields.forEach(field => {
+            if (!form.elements[field]) {
+                throw new FormValidationError(`Поле ${field} відсутнє у формі`, field);
+            }
+        });
+
+        const name = form.elements['name'].value.trim();
+        const phone = form.elements['phone'].value.trim();
+        const address = form.elements['address'].value.trim();
+
+        if (name.length < 2) {
+            throw new FormValidationError("Ім'я повинно містити мінімум 2 символи", 'name');
+        }
+        const phoneRegex = /^\+?380\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            throw new FormValidationError('Невірний формат телефону. Приклад: +380501234567', 'phone');
+        }
+        if (address.length < 10) {
+            throw new FormValidationError('Адреса повинна містити мінімум 10 символів', 'address');
+        }
+
+        return {
+            name,
+            phone,
+            address
+        };
+    } catch (error) {
+
+        if (error instanceof FormValidationError) {
+            const errorField = form.elements[error.field];
+            if (errorField) {
+                errorField.classList.add('error');
+                setTimeout(() => errorField.classList.remove('error'), 3000);
+            }
+        }
+
+        alert(error.message);
+        throw error;
+    }
+}
 
     orders.push(order);
     alert(`Дякуємо, ${formData.name}! Ваше замовлення підтверджене.`);
@@ -572,10 +621,19 @@ function displayShopItems(items) {
         return;
     }
 
+    // для зберігання елементів
+    const fragment = document.createDocumentFragment();
+
     items.forEach(item => {
-        shopGrid.appendChild(createShopItem(item));
+        const shopItem = createShopItem(item);
+        fragment.appendChild(shopItem);
     });
+
+    // додає всі елементи до DOM за один раз
+    shopGrid.appendChild(fragment);
 }
+
+
 
 displayShopItems(shopItems);
 
@@ -592,16 +650,40 @@ document.getElementById('applyFilters').addEventListener('click', () => {
     displayShopItems(filteredItems);
 });
 
+
+
+
 function createShopItem(item) {
     const shopItem = document.createElement('div');
     shopItem.classList.add('shop-item');
-    shopItem.innerHTML = `
-        <img src="${item.image}" alt="${item.name}">
-        <h3>${item.name} <span class="item-category">(${item.category})</span></h3>
-        <p>${item.description}</p>
-        <p class="price">$${item.price}</p>
-        <button class="buy-btn">Купити</button>
-    `;
+
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.alt = item.name;
+    shopItem.appendChild(img);
+
+    const title = document.createElement('h3');
+    title.textContent = item.name;
+    const category = document.createElement('span');
+    category.classList.add('item-category');
+    category.textContent = ` (${item.category})`;
+    title.appendChild(category);
+    shopItem.appendChild(title);
+
+    const description = document.createElement('p');
+    description.textContent = item.description;
+    shopItem.appendChild(description);
+
+    const price = document.createElement('p');
+    price.classList.add('price');
+    price.textContent = `$${item.price}`;
+    shopItem.appendChild(price);
+
+    const button = document.createElement('button');
+    button.classList.add('buy-btn');
+    button.textContent = 'Купити';
+    shopItem.appendChild(button);
+
     return shopItem;
 }
 
