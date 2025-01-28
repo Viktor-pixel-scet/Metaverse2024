@@ -65,14 +65,63 @@ function handleOrderSubmission(e) {
     resetForm(e.target);
 }
 
-function getFormData(form) {
-    return {
-        name: form.elements['name'].value,
-        phone: form.elements['phone'].value,
-        address: form.elements['address'].value,
-    };
+
+class FormValidationError extends Error {
+    constructor(message, field) {
+        super(message);
+        this.name = 'FormValidationError';
+        this.field = field;
+    }
 }
 
+
+function getFormData(form) {
+    try {
+        if (!form || !(form instanceof HTMLFormElement)) {
+            throw new Error('Форму не знайдено або передано невірний тип');
+        }
+
+        const requiredFields = ['name', 'phone', 'address'];
+        requiredFields.forEach(field => {
+            if (!form.elements[field]) {
+                throw new FormValidationError(`Поле ${field} відсутнє у формі`, field);
+            }
+        });
+
+        const name = form.elements['name'].value.trim();
+        const phone = form.elements['phone'].value.trim();
+        const address = form.elements['address'].value.trim();
+
+        if (name.length < 2) {
+            throw new FormValidationError("Ім'я повинно містити мінімум 2 символи", 'name');
+        }
+        const phoneRegex = /^\+?380\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            throw new FormValidationError('Невірний формат телефону. Приклад: +380501234567', 'phone');
+        }
+        if (address.length < 10) {
+            throw new FormValidationError('Адреса повинна містити мінімум 10 символів', 'address');
+        }
+
+        return {
+            name,
+            phone,
+            address
+        };
+    } catch (error) {
+
+        if (error instanceof FormValidationError) {
+            const errorField = form.elements[error.field];
+            if (errorField) {
+                errorField.classList.add('error');
+                setTimeout(() => errorField.classList.remove('error'), 3000);
+            }
+        }
+
+        alert(error.message);
+        throw error;
+    }
+}
 
     orders.push(order);
     alert(`Дякуємо, ${formData.name}! Ваше замовлення підтверджене.`);
