@@ -621,10 +621,19 @@ function displayShopItems(items) {
         return;
     }
 
+    // для зберігання елементів
+    const fragment = document.createDocumentFragment();
+
     items.forEach(item => {
-        shopGrid.appendChild(createShopItem(item));
+        const shopItem = createShopItem(item);
+        fragment.appendChild(shopItem);
     });
+
+    // додає всі елементи до DOM за один раз
+    shopGrid.appendChild(fragment);
 }
+
+
 
 displayShopItems(shopItems);
 
@@ -640,6 +649,9 @@ document.getElementById('applyFilters').addEventListener('click', () => {
 
     displayShopItems(filteredItems);
 });
+
+
+
 
 function createShopItem(item) {
     const shopItem = document.createElement('div');
