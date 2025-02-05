@@ -54,7 +54,10 @@ function updateCart() {
 }
 
 function removeFromCart(index) {
-    cart.splice(index, 1);
+    const index = cart.findIndex(item => item.id === productId);
+    if (index !== -1) {
+        cart.splice(index, 1);
+    }
     updateCart();
 }
 
