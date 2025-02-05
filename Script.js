@@ -38,7 +38,7 @@ const cartItemsContainer = document.querySelector('.cart-items');
 function updateCart() {
     cartItemsContainer.innerHTML = '';
     let total = 0;
-
+document.querySelector('.cart-count').textContent = cart.length;
     cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
         const itemDiv = document.createElement('div');
