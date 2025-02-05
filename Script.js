@@ -35,6 +35,13 @@ let cart = [];
 const cartModal = document.getElementById('cartModal');
 const cartItemsContainer = document.querySelector('.cart-items');
 
+function checkoutModal() {
+    if (cart.length === 0) {
+        alert("Ваш кошик порожній! Додайте товари до кошика перед оформленням.");
+        return false; 
+    }
+}
+
 function updateCart() {
     cartItemsContainer.innerHTML = '';
     let total = 0;
