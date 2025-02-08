@@ -604,6 +604,16 @@ function createShopItem(item) {
     `;
     return shopItem;
 }
+document.getElementById("categoryFilter").addEventListener("change", function () {
+  let selectedCategory = this.value;
+  document.querySelectorAll(".product").forEach(product => {
+    if (selectedCategory === "all" || product.dataset.category === selectedCategory) {
+      product.style.display = "block";
+    } else {
+      product.style.display = "none";
+    }
+  });
+});
 
 document.getElementById('shopGrid').addEventListener('click', (e) => {
     if (e.target.classList.contains('buy-btn')) {
