@@ -95,6 +95,9 @@ document.querySelector('.checkout-btn').addEventListener('click', () => {
     cartModal.style.display = 'none';
     checkoutModal.style.display = 'block';
 });
+document.getElementById("phone").addEventListener("input", function () {
+  this.value = this.value.replace(/[^0-9+]/g, ""); // Видаляє все, крім цифр та "+"
+});
 
 function displayOrders() {
     const ordersList = document.getElementById('ordersList');
