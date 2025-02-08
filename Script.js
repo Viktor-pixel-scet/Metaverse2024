@@ -61,8 +61,24 @@ function removeFromCart(index) {
 function handleOrderSubmission(e) {
     e.preventDefault();
     const formData = getFormData(e.target);
-    processOrder(formData);
-    resetForm(e.target);
+    
+    if (!formData.name || !formData.phone || !formData.address) {
+        alert('Будь ласка, заповніть всі поля.');
+        return;
+    }
+    
+    const order = {
+        name: formData.name,
+        phone: formData.phone,
+        address: formData.address,
+        items: [...cartManager.cart]
+    };
+    
+    cartManager.orders.push(order);
+    alert(`Дякуємо, ${formData.name}! Ваше замовлення підтверджене.`);
+    document.getElementById('checkoutModal').style.display = 'none';
+    cartManager.cart = [];
+    cartManager.updateCart();
 }
 
 function getFormData(form) {
