@@ -31,6 +31,40 @@ document.addEventListener('click', (e) => {
     }
 });
 
+class CartManager {
+    constructor() {
+        this.cart = [];
+        this.cartItemsContainer = document.querySelector('.cart-items');
+    }
+
+    addToCart(item) {
+        this.cart.push(item);
+        this.updateCart();
+    }
+
+    removeFromCart(index) {
+        this.cart.splice(index, 1);
+        this.updateCart();
+    }
+
+    updateCart() {
+        this.cartItemsContainer.innerHTML = '';
+        if (this.cart.length === 0) {
+            this.cartItemsContainer.innerHTML = '<p>Ваш кошик порожній.</p>';
+            return;
+        }
+
+        this.cart.forEach((item, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'cart-item';
+            itemDiv.innerHTML = `${item.name} - $${item.price.toFixed(2)} x${item.quantity}`;
+            this.cartItemsContainer.appendChild(itemDiv);
+        });
+    }
+}
+
+const cartManager = new CartManager();
+
 let cart = [];
 const cartModal = document.getElementById('cartModal');
 const cartItemsContainer = document.querySelector('.cart-items');
