@@ -12,6 +12,11 @@ const confirmYes = document.getElementById('confirmYes');
 const confirmNo = document.getElementById('confirmNo');
 
 
+function setupRemoveButtons() {
+    document.querySelectorAll('.remove-btn').forEach((btn, index) => {
+        btn.addEventListener('click', () => cartManager.removeFromCart(index));
+    });
+}
 
 navBtn.addEventListener('click', () => {
     navMenu.classList.toggle('active');
