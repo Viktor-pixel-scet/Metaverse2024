@@ -11,6 +11,17 @@ const confirmMessage = document.getElementById('confirmMessage');
 const confirmYes = document.getElementById('confirmYes');
 const confirmNo = document.getElementById('confirmNo');
 
+async function loadStats() {
+  let response = await fetch("https://api.example.com/stats");
+  let data = await response.json();
+
+  document.getElementById("stats").innerHTML = `
+    <p>Замовлень: ${data.orders}</p>
+    <p>Користувачів: ${data.users}</p>
+  `;
+}
+
+loadStats();
 
 
 navBtn.addEventListener('click', () => {
