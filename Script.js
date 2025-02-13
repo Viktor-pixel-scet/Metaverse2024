@@ -607,26 +607,31 @@ function createShopItem(item) {
 
 document.getElementById('shopGrid').addEventListener('click', (e) => {
     if (e.target.classList.contains('buy-btn')) {
-        currentItemName = e.target.parentElement.querySelector('h3').textContent;
-        currentItemPrice = parseFloat(e.target.parentElement.querySelector('.price').textContent.replace('$', ''));
+        const shopItem = e.target.closest('.shop-item');
+        const itemName = shopItem.querySelector('h3').textContent;
+        const itemPrice = parseFloat(shopItem.querySelector('.price').textContent.replace('$', ''));
 
-        confirmMessage.textContent = `Ви підтверджуєте додавання "${currentItemName}" до кошика?`;
+        confirmMessage.textContent = `Ви підтверджуєте додавання "${itemName}" до кошика?`;
+        confirmYes.dataset.name = itemName;
+        confirmYes.dataset.price = itemPrice;
 
         confirmModal.style.display = 'flex';
     }
 });
 
 confirmYes.addEventListener('click', () => {
-    const existingItem = cart.find(item => item.name === currentItemName);
+    const name = confirmYes.dataset.name;
+    const price = parseFloat(confirmYes.dataset.price);
+
+    const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
         existingItem.quantity++;
     } else {
-        cart.push({ name: currentItemName, price: currentItemPrice, quantity: 1 });
+        cart.push({ name, price, quantity: 1 });
     }
 
     confirmModal.style.display = 'none';
-
-    updateCart();
+    renderCart();
 });
 
 confirmNo.addEventListener('click', () => {
