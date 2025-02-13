@@ -61,6 +61,8 @@ function removeFromCart(index) {
 function handleOrderSubmission(e) {
     e.preventDefault();
     const formData = getFormData(e.target);
+    if (!formData) return;
+
     processOrder(formData);
     resetForm(e.target);
 }
@@ -638,3 +640,20 @@ confirmNo.addEventListener('click', () => {
     confirmModal.style.display = 'none';
 });
 
+function getFormData(form) {
+    const name = form.elements['name'].value.trim();
+    const phone = form.elements['phone'].value.trim();
+    const address = form.elements['address'].value.trim();
+
+    if (!name || !phone || !address) {
+        alert('Будь ласка, заповніть всі поля.');
+        return null;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+        alert('Будь ласка, введіть коректний номер телефону (10 цифр).');
+        return null;
+    }
+
+    return { name, phone, address };
+}
