@@ -657,3 +657,11 @@ function getFormData(form) {
 
     return { name, phone, address };
 }
+
+cartItemsContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-btn')) {
+        const index = parseInt(e.target.dataset.index);
+        cart.splice(index, 1);
+        renderCart();
+    }
+});
