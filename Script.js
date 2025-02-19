@@ -39,7 +39,6 @@ function updateCart() {
     cartItemsContainer.innerHTML = '';
     let total = 0;
 
-    cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'cart-item';
