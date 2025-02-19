@@ -1,4 +1,7 @@
 let orders = [];
+let currentItemName;
+let currentItemPrice;
+
 
 const navBtn = document.querySelector('.nav-btn');
 const navMenu = document.querySelector('.nav-menu');
