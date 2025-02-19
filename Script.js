@@ -45,7 +45,7 @@ function updateCart() {
         itemDiv.className = 'cart-item';
         itemDiv.innerHTML = `${item.name} - $${item.price} x${item.quantity} 
     <button class="remove-btn" onclick="removeFromCart(${index})">Скасувати</button>`;
-        cartItemsContainer.appendChild(itemDiv);
+         cartItemsContainer.appendChild(itemDiv);
     });
 
 
